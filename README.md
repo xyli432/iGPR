@@ -60,9 +60,6 @@ noise_std = 0.1;
 
 % ---------------------- iGPR Model Prediction ----------------------
 % Predict test outputs using iGPR (Intrinsic Gaussian Process Regression on sphere)
-% Inputs: sphere manifold, training geodesics, training inputs, training outputs,
-%         test geodesics, test inputs
-% Outputs: iGPR_predicted_y (predicted test outputs), testL (additional output, unused here)
 [iGPR_predicted_y,testL]  = sphere_gp_prediction(sphere_mfd, train_geo, train_x, train_y, test_geo, test_x);
 % Calculate geodesic error (distance on sphere) between iGPR predictions and true test outputs
 disp(sphere_geodesic_error(sphere_mfd, iGPR_predicted_y, test_y));
@@ -111,8 +108,8 @@ noise_std = 0.1;
 
 % Split the dataset into training and testing sets
 % 'random' split with 20% of data used for testing; 'sequential' split with a% of data used for testing (the last a% of samples as test set)
-% Returns training/testing geodesic points, input variables (t), output variables (y), and split indices
 [train_geo, test_geo, train_t, test_t, train_y, test_y, indices] = spd_split_dataset(geodesic_points, x, y, 'random', 0.2); %sequential
+
 % Geodesic regression to estimate prior curve
 %[~, ~,train_t, test_t, train_y, test_y, indices] = spd_split_dataset(geodesic_points, x, y, 'random',0.2);
 %options = struct();
@@ -123,15 +120,12 @@ noise_std = 0.1;
 
 % ---------------------- iGPR Prediction ----------------------
 % Predict test outputs using iGPR (intrinsic Gaussian Process Regression on SPD manifold)
-% Inputs: manifold, training geodesics, training inputs, training outputs, 
-%         test geodesics, test inputs
-% Outputs: predicted test outputs, additional output (unused)
 [predicted_y,~] = spd_gp_prediction(spd_mfd, train_geo, train_t, train_y, test_geo, test_t);
 % Calculatethe geodesic error between predictions and true test outputs
 disp(spd_geodesic_error(spd_mfd, predicted_y, test_y));
 
 % ---------------------- WGPR Prediction ----------------------
-% Predict test outputs using WGPR (Wrapped Gaussian Process Regression variant on SPD manifold)
+% Predict test outputs using WGPR (Wrapped Gaussian Process Regression on SPD manifold)
 [comparison_pred,~] = spd_comparison_prediction(spd_mfd, train_geo, train_t, train_y, test_geo, test_t);
 % Calculate the geodesic error for WGPR
 disp(spd_geodesic_error(spd_mfd,comparison_pred, test_y));
