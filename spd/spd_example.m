@@ -33,10 +33,8 @@ num_trials = 100;
 % Preallocate arrays to store errors and computation times for each trial
 gp_errors = zeros(num_trials, 1);          % Errors for the first model (iGPR)
 comparison_errors = zeros(num_trials, 1);  % Errors for the second model (WGPR)
-comparison_errors1 = zeros(num_trials, 1); % (Unused) Errors for a potential third model
 gp_time = zeros(num_trials, 1);            % Computation times for iGPR
 comparison_time = zeros(num_trials, 1);    % Computation times for WGPR
-comparison_time1 = zeros(num_trials, 1);   % (Unused) Times for a potential third model
 
 % Generate geodesic points and corresponding input/output data on the SPD manifold
 % Inputs: manifold, number of points, matrix dimension, covariance matrices, hyperparameters,
@@ -47,7 +45,7 @@ comparison_time1 = zeros(num_trials, 1);   % (Unused) Times for a potential thir
 % Run multiple trials to evaluate model performance
 for trial = 1:num_trials
     % Split the dataset into training and testing sets
-    % 'random' split with 20% of data used for testing; 'sequential' split with a of data used for testing (the last 1-a of samples as test set)
+    % 'random' split with 20% of data used for testing; 'sequential' split with 1-a of data used for testing (the last a of samples as test set)
     % Returns training/testing geodesic points, input variables (t), output variables (y), and split indices
     %[geodesic_points,x, y] = spd_generate_outputs(spd_mfd, N, matD, cov_row, cov_col, hyp_init, theta_params, start_mat, dir_mat,noise_std, generation_type);
     [train_geo, test_geo, train_t, test_t, train_y, test_y, indices] = spd_split_dataset(geodesic_points, x, y, 'random', 0.2); %sequential
@@ -144,5 +142,6 @@ disp(results_table);
 % % Add legend in the best possible location
 % legend('Location', 'best', 'FontSize', 10);  
 % hold off;  % Release plot
+
 
 
