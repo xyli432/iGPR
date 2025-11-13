@@ -76,7 +76,7 @@ for trial = 1:num_trials
     % ---------------------- WGPR Prediction ----------------------
     % Measure computation time for WGPR prediction
     tic;
-    % Predict test outputs using WGPR (Wrapped Gaussian Process Regression variant on SPD manifold)
+    % Predict test outputs using WGPR (Wrapped Gaussian Process Regression on SPD manifold)
     [comparison_pred,~] = spd_comparison_prediction(spd_mfd, train_geo, train_t, train_y, test_geo, test_t);
     % Store the computation time for this trial
     comparison_time(trial) = toc;
@@ -144,4 +144,5 @@ disp(results_table);
 % % Add legend in the best possible location
 % legend('Location', 'best', 'FontSize', 10);  
 % hold off;  % Release plot
+
 
