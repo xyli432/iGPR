@@ -1,16 +1,22 @@
 # iGPR
 iGPR is a MATLAB code implementing the intrinsic Gaussian Process Regression model
-## two baselines
 
-- iGPR: [intrinsic Gaussian Process Regression on Riemannian Manifolds](https://arxiv.org/abs/2411.18989)
-- WGPR: [Wrapped Gaussian Process Regression on Riemannian Manifolds](https://openaccess.thecvf.com/content_cvpr_2018/html/Mallasto_Wrapped_Gaussian_Process_CVPR_2018_paper.html)
+## Some examples (Demo)
 
-## some example commands
+- a sphere example is in [sphere-example.m ](https://github.com/xyli432/iGPR/blob/main/sphere/sphere_example.m)
+- a spd example is in [spd-example.m ](https://github.com/xyli432/iGPR/blob/main/spd/spd_example.m)
+
+## Note
 It includes code examples for two common manifolds, with detailed instructions on specific usage provided in the files spd-example.m and sphere-example.m.
 
 - Before experiments, first add the paths: Run
 - [startup.m](https://github.com/xyli432/iGPR/blob/main/gpml-matlab-master/startup.m)  and
 - [add_path.m](https://github.com/xyli432/iGPR/blob/main/gptp_multi_output-master/add_path.m).
+- 
+## two baselines
+
+- iGPR: [intrinsic Gaussian Process Regression on Riemannian Manifolds](https://arxiv.org/abs/2411.18989)
+- WGPR: [Wrapped Gaussian Process Regression on Riemannian Manifolds](https://openaccess.thecvf.com/content_cvpr_2018/html/Mallasto_Wrapped_Gaussian_Process_CVPR_2018_paper.html)
 
 ```
 ### Sphere manifold
@@ -49,14 +55,6 @@ noise_std = 0.1;
 % Outputs: split geodesic points (train_geo/test_geo), input features (train_x/test_x),
 %          output data (train_y/test_y), and indices of train/test samples
 [train_geo, test_geo, train_x, test_x, train_y, test_y, indices] = sphere_split_dataset(geodesic_points, x, y, 'random', 0.2); %sequential;random
-
- % Optional: Geodesic regression to estimate a prior curve 
- % p_initial = [1; 0; 0]; 
- % v_initial = [0; pi/4; 0]; 
- % lr = 0.1; 
- % iterations = 500; 
- % dim_size = 2;  
- % [train_geo, test_geo, cost] = sphere_geodesic_regression(sphere_mfd, p_initial, v_initial, train_x, train_y, test_x,lr, iterations, dim_size);
 
 % ---------------------- iGPR Model Prediction ----------------------
 % Predict test outputs using iGPR (Intrinsic Gaussian Process Regression on sphere)
@@ -110,14 +108,6 @@ noise_std = 0.1;
 % 'random' split with 20% of data used for testing; 'sequential' split with a% of data used for testing (the last a% of samples as test set)
 [train_geo, test_geo, train_t, test_t, train_y, test_y, indices] = spd_split_dataset(geodesic_points, x, y, 'random', 0.2); %sequential
 
-% Geodesic regression to estimate prior curve
-%[~, ~,train_t, test_t, train_y, test_y, indices] = spd_split_dataset(geodesic_points, x, y, 'random',0.2);
-%options = struct();
-%options.iterations = 200; 
-%options.lr = 0.5;         
-%options.verbose = true;    
-%[train_geo,test_geo,train_costs] = spd_geodesic_regression(train_t, train_y, x, indices.train_idx, indices.test_idx, matD, options);
-
 % ---------------------- iGPR Prediction ----------------------
 % Predict test outputs using iGPR (intrinsic Gaussian Process Regression on SPD manifold)
 [predicted_y,~] = spd_gp_prediction(spd_mfd, train_geo, train_t, train_y, test_geo, test_t);
@@ -130,8 +120,3 @@ disp(spd_geodesic_error(spd_mfd, predicted_y, test_y));
 % Calculate the geodesic error for WGPR
 disp(spd_geodesic_error(spd_mfd,comparison_pred, test_y));
 ```
-
-## full examples 
-
-- a full sphere example is in [sphere-example.m ](https://github.com/xyli432/iGPR/blob/main/sphere/sphere_example.m)
-- a full spd example is in [spd-example.m ](https://github.com/xyli432/iGPR/blob/main/spd/spd_example.m)
